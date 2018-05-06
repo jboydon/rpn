@@ -33,16 +33,23 @@ static ret_value entry(program& prog)
 {
     char* entry;
     ret_value ret;
+    int entry_len = 0;
 
     // linenoise for entry
     linenoiseSetCompletionCallback(program::entry_completion_generator);
 
     // get user entry
-    entry = linenoise(PROMPT);
+    entry = linenoise(PROMPT, &entry_len);
 
     // Ctrl-C
     if (linenoiseKeyType() == 1)
-        ret = ret_good_bye;
+    {
+        // simply clear the line if there is an entry or go out
+        if (entry_len > 0)
+            ret = ret_line_cancelled;
+        else
+            ret = ret_good_bye;
+    }
     else
     {
         if (entry != NULL)
@@ -162,7 +169,7 @@ static bool _cut(const char* entry, vector<string>& entries)
                                 i++;
                         }
                         else if (strncmp(&entry[i], ">>", 2) == 0)
-                        {                        
+                        {
                             if (isspace(entry[i-1]) && entry[i-2]!='>')
                                 tmp += ">>";
                             else
@@ -523,7 +530,7 @@ static bool get_complex(const string& entry, program& prog, string& remaining_en
 static bool _obj_from_string(string& entry, program& prog, string& remaining_entry)
 {
     bool ret = false;
-    
+
     remaining_entry.erase();
 
     if (get_number(entry, prog, remaining_entry))

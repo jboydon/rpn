@@ -8,7 +8,7 @@
 #include <pwd.h>
 #include <linux/limits.h>
 
-// internal includes 
+// internal includes
 #include "program.hpp"
 
 static heap s_global_heap;
@@ -90,10 +90,11 @@ static void catch_signals(program* prog)
 int main(int argc, char* argv[])
 {
     int ret = 0;
-    
+    bool go_out = false;
+
     // apply default configuration
     program::apply_default();
-    
+
     // run with interactive prompt
     if (argc == 1)
     {
@@ -101,22 +102,29 @@ int main(int argc, char* argv[])
         init_interactive_rpn();
 
         // entry loop
-        for (;;)
+        while (!go_out)
         {
             // make program from interactive entry
             program prog;
-            if (program::entry(prog) == ret_good_bye)
-                break;
-            else
+            switch(program::entry(prog))
             {
-                // user could stop prog with CtrlC
-                catch_signals(&prog);
-
-                // run it
-                if (prog.run(s_global_stack, s_global_heap) == ret_good_bye)
+                case ret_good_bye:
+                    // go out
+                    go_out = true;
                     break;
-                else
-                    program::show_stack(s_global_stack);
+                case ret_line_cancelled:
+                    // simply wait for another entry
+                    break;
+                default:
+                    // user could stop prog with CtrlC
+                    catch_signals(&prog);
+
+                    // run it
+                    if (prog.run(s_global_stack, s_global_heap) == ret_good_bye)
+                        break;
+                    else
+                        program::show_stack(s_global_stack);
+                    break;
             }
         }
 
@@ -151,8 +159,8 @@ int main(int argc, char* argv[])
             program::show_stack(s_global_stack, true);
         }
     }
- 
+
     mpfr_free_cache();
- 
+
     return ret;
 }

@@ -47,17 +47,17 @@ struct floating_t
         mpfr_custom_move(mpfr, significand);
     }
 
-    floating_t& operator=(const double val)
+    void operator=(const double val)
     {
         mpfr_set_d(mpfr, val, s_mpfr_rnd);
     }
 
-    floating_t& operator=(const long int val)
+    void operator=(const long int val)
     {
         mpfr_set_si(mpfr, val, s_mpfr_rnd);
     }
 
-    floating_t& operator=(const unsigned long val)
+    void operator=(const unsigned long val)
     {
         mpfr_set_ui(mpfr, val, s_mpfr_rnd);
     }

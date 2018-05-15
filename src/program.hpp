@@ -6,6 +6,7 @@
 #include <stdint.h>
 #include <sys/mman.h>
 #include <math.h>
+#include <stdio.h>
 
 extern "C" {
 #include <readline/readline.h>
@@ -31,6 +32,8 @@ using namespace std;
 #include "debug.h"
 #include "object.hpp"
 #include "stack.hpp"
+
+#include "linenoise.h"
 
 //
 struct if_layout_t
@@ -470,8 +473,10 @@ public:
             case ret_internal:
             case ret_deadly:
                 ret = ret_deadly;
+                break;
             default:
                 ret = ret_ok;
+                break;
         }
         
         return ret;

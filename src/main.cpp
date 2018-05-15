@@ -6,9 +6,16 @@
 #include <stdlib.h>
 #include <sys/types.h>
 #include <pwd.h>
+#include <stdio.h>
+
+#ifdef LINUX
 #include <linux/limits.h>
+#else
+#include <limits.h>
+#endif
 
 // internal includes
+#include "linenoise.h"
 #include "program.hpp"
 
 static heap s_global_heap;
@@ -111,15 +118,17 @@ int main(int argc, char* argv[])
                 case ret_good_bye:
                     go_on = false;
                     break;
+                    
                 case ret_abort_current_entry:
                     break;
+                    
                 default:
                     // user could stop prog with CtrlC
                     catch_signals(&prog);
 
                     // run it
                     if (prog.run(s_global_stack, s_global_heap) == ret_good_bye)
-                        break;
+                        go_on = false;
                     else
                         program::show_stack(s_global_stack);
                     break;

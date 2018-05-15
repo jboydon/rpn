@@ -82,9 +82,9 @@ void test(string test_filename, int& total_tests, int& total_tests_failed, int& 
         stack stk;
         heap hp;
         bool failed = false;
-        bool is_first_step;
-        bool is_test_error_shown;
-        int last_err;
+        bool is_first_step = false;
+        bool is_test_error_shown = false;
+        int last_err = 0;
         stringstream cerr_buffer;
         streambuf* cerr_old_buffer;
 

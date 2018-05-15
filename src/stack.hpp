@@ -3,6 +3,8 @@
 
 #include <string.h>
 #include <map>
+#include <stdio.h>
+
 using namespace std;
 
 // allocation base size
@@ -65,7 +67,7 @@ public:
     {
         object* allocated;
         bool data_is_reallocated = false;
-        char* old_base;
+        char* old_base = NULL;
 
         // manage data memory allocation (add as much as memory it is needed)
         if (((_current - _base) + size) > _total_size)
@@ -270,6 +272,8 @@ public:
                 ret = true;
             }
         }
+        
+        return ret;
     }
 
     bool exist(const string name)
@@ -322,7 +326,7 @@ public:
         ((stack*)this)->erase();
     }
 
-    unsigned int count_vars() { return _map.size(); }
+    unsigned long count_vars() { return _map.size(); }
 
 private:
     map<string, unsigned int> _map;

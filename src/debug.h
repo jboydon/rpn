@@ -6,7 +6,7 @@ static void dump8(unsigned char* to_dump, unsigned long offset,
 {
     const int block_size = 1;
     const int block_per_line = 16;
-    int max_line = size / block_size;
+    unsigned long max_line = size / block_size;
     unsigned char mychar;
     int i;
     int j;
@@ -81,7 +81,7 @@ static void chrono_all_print(void)
 {
     for(int i = 1; i < chrono_next; i++)
     {
-        printf("CHRONO [%lu us] %s\n", chrono_diff_us(&chrono_point[i-1].ts_point, &chrono_point[i].ts_point), chrono_point[i].comment);
+        printf("CHRONO [%lu us] %s\n", (unsigned long)chrono_diff_us(&chrono_point[i-1].ts_point, &chrono_point[i].ts_point), chrono_point[i].comment);
     }
 }
 
@@ -89,7 +89,7 @@ static void chrono_print(int chrono)
 {
     if (chrono >= 1)
     {
-        printf("CHRONO [%lu us] %s\n", chrono_diff_us(&chrono_point[chrono-1].ts_point, &chrono_point[chrono].ts_point), chrono_point[chrono].comment);
+        printf("CHRONO [%lu us] %s\n", (unsigned long)chrono_diff_us(&chrono_point[chrono-1].ts_point, &chrono_point[chrono].ts_point), chrono_point[chrono].comment);
     }
 }
 

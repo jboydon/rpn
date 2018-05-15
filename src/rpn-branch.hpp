@@ -223,8 +223,8 @@ int rpn_next(branch& myobj)
     // for command: increment symbol too
     if (start_or_for->arg1 != -1)
     {
-        object* obj;
-        unsigned int size;
+        //object* obj;
+        //unsigned int size;
         symbol* var = (symbol*)seq_obj(start_or_for->arg1);
 
         // increase symbol variable
@@ -278,8 +278,8 @@ int rpn_step(branch& myobj)
         // for command: increment symbol too
         if (start_or_for->arg1 != -1)
         {
-            object* obj;
-            unsigned int size;
+            //object* obj;
+            //unsigned int size;
             symbol* var = (symbol*)seq_obj(start_or_for->arg1);
 
             // increase symbol variable

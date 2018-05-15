@@ -131,7 +131,7 @@ void rpn_strsub()
 
     if (!result_is_void)
     {
-        unsigned int str_size = last - first + 1;
+        unsigned int str_size = (unsigned int)(last - first + 1);
         ostring* str = (ostring*)_calc_stack.allocate_back(str_size+1+sizeof(ostring), cmd_string);
         str->_len = str_size;
         

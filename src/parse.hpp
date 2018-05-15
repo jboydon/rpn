@@ -32,15 +32,16 @@ static ret_value parse(const char* entry, program& prog)
 static ret_value entry(program& prog)
 {
     char* entry;
-    int entry_len;
+    int entry_len = 0;
     ret_value ret;
 
     // linenoise for entry
     linenoiseSetCompletionCallback(program::entry_completion_generator);
 
     // get user entry
-    entry = linenoise(PROMPT, &entry_len);
-
+    // entry = linenoise(PROMPT, &entry_len);
+    entry = linenoise(PROMPT);
+    
     // Ctrl-C
     if (linenoiseKeyType() == 1)
     {
@@ -89,9 +90,9 @@ static ret_value get_fn(const char* fn_name, program_fn_t& fn, cmd_type_t& type)
 static bool _cut(const char* entry, vector<string>& entries)
 {
     string tmp;
-    int len = strlen(entry);
+    size_t len = strlen(entry);
 
-    for (int i=0; i < len; i++)
+    for (size_t i=0; i < len; i++)
     {
         switch(entry[i])
         {
@@ -262,17 +263,17 @@ static bool get_keyword(const string& entry, program& prog, string& remaining_en
         if (type == cmd_keyword)
         {
             // allocate keyword object
-            obj_len = sizeof(keyword)+entry.size()+1;
+            obj_len = (unsigned int)(sizeof(keyword)+entry.size()+1);
             keyword* new_obj = (keyword*)prog.allocate_back(obj_len, cmd_keyword);
-            new_obj->set(fn, entry.c_str(), entry.size());
+            new_obj->set(fn, entry.c_str(), (int)entry.size());
             ret = true;
         }
         else if (type == cmd_branch)
         {
             // allocate branch object
-            obj_len = sizeof(branch)+entry.size()+1;
+            obj_len = (unsigned int)(sizeof(branch)+entry.size()+1);
             branch* new_obj = (branch*)prog.allocate_back(obj_len, cmd_branch);
-            new_obj->set((branch_fn_t)fn, entry.c_str(), entry.size());
+            new_obj->set((branch_fn_t)fn, entry.c_str(), (int)entry.size());
             ret = true;
         }
     }
@@ -283,7 +284,7 @@ static bool get_keyword(const string& entry, program& prog, string& remaining_en
 static bool get_symbol(const string& entry, program& prog, string& remaining_entry)
 {
     bool ret = false;
-    int entry_len = entry.size();
+    unsigned int entry_len = (unsigned int)entry.size();
     unsigned int obj_len;
 
     if (entry_len>=1 && entry[0]=='\'')
@@ -302,12 +303,12 @@ static bool get_symbol(const string& entry, program& prog, string& remaining_ent
         else
         {
             // symbol entry, like 'toto' or 'toto
-            int naked_entry_len;
+            unsigned int naked_entry_len;
 
             // entry length without prefix / postfix
             naked_entry_len = entry[entry_len-1]=='\''?(entry_len-2):(entry_len-1);
             // total object length
-            obj_len = sizeof(symbol)+naked_entry_len+1;
+            obj_len = (unsigned int)sizeof(symbol)+naked_entry_len+1;
 
             // allocate and set object
             // symbol beginning with ' is not autoevaluated
@@ -323,7 +324,7 @@ static bool get_symbol(const string& entry, program& prog, string& remaining_ent
 static bool get_other(const string& entry, program& prog, string& remaining_entry)
 {
     bool ret = false;
-    int entry_len = entry.size();
+    unsigned int entry_len = (unsigned int)entry.size();
     unsigned int obj_len;
 
     if (entry_len>=1)
@@ -350,7 +351,7 @@ static bool get_string(const string& entry, program& prog, string& remaining_ent
 {
     bool ret = false;
     unsigned int obj_len;
-    int entry_len = entry.size();
+    unsigned int entry_len = (unsigned int)entry.size();
     if (entry_len>=1 && entry[0]=='"')
     {
         if (entry_len == 1)
@@ -386,7 +387,7 @@ static bool get_program(string& entry, program& prog, string& remaining_entry)
 {
     bool ret = false;
     unsigned int obj_len;
-    int entry_len = entry.size();
+    unsigned int entry_len = (unsigned int)entry.size();
     if (entry_len>=2 && entry[0]=='<' && entry[1]=='<')
     {
         int naked_entry_len;
@@ -424,14 +425,19 @@ static bool get_number(string& entry, program& prog, string& remaining_entry)
             int base = 0;
             size_t base_detect = entry.find_first_of("b", 0);
             if (base_detect == 1 || base_detect == 2)
+            {
                 if (sscanf(entry.c_str(), "%db", &base) == 1 && base >= 2 && base <= 62)
                     entry=entry.substr(base_detect+1);
                 else
                     base = 0;
+            }
 
             number* num = (number*)prog.allocate_back(number::calc_size(), cmd_number);
-
             int mpfr_ret = mpfr_strtofr(num->_value.mpfr, entry.c_str(), &endptr, base, MPFR_DEFAULT_RND);
+            
+            if(mpfr_ret!=0)
+                ; // TODO
+            
             if (endptr != NULL && endptr != entry.c_str())
             {
                 // determine representation
@@ -474,7 +480,7 @@ static bool get_complex(const string& entry, program& prog, string& remaining_en
         size_t comma = entry.find(',');
         if (comma != string::npos)
         {
-            complex* cplx;
+            complex* cplx = NULL;
 
             // pre parse RE to avoid doing a useless allocation
             // detect the begining of a number, including nan, inf, @nan@, @inf@
@@ -482,8 +488,11 @@ static bool get_complex(const string& entry, program& prog, string& remaining_en
             if (re_str.find_first_of(" +-0123456789.ni@", 0) == 0)
             {
                 cplx = (complex*)prog.allocate_back(complex::calc_size(), cmd_complex);
-
                 int mpfr_ret = mpfr_strtofr(cplx->re()->mpfr, re_str.c_str(), &endptr, 0, MPFR_DEFAULT_RND);
+                
+                if(mpfr_ret!=0)
+                    ; // TODO
+
                 if (endptr != NULL && endptr != re_str.c_str())
                 {
                     // determine representation
@@ -506,6 +515,10 @@ static bool get_complex(const string& entry, program& prog, string& remaining_en
             {
                 ret = false;
                 int mpfr_ret = mpfr_strtofr(cplx->im()->mpfr, im_str.c_str(), &endptr, 0, MPFR_DEFAULT_RND);
+                
+                if(mpfr_ret!=0)
+                    ; // TODO
+
                 if (endptr != NULL && endptr != im_str.c_str())
                 {
                     // determine representation
@@ -555,7 +568,7 @@ static bool _obj_from_string(string& entry, program& prog, string& remaining_ent
 static void entry_completion_generator(const char* text, linenoiseCompletions* lc)
 {
     int i = 0;
-    int text_len = strnlen(text, 6);
+    unsigned int text_len = (unsigned int)strnlen(text, 6);
 
     // propose all keywords
     if (text_len ==0)

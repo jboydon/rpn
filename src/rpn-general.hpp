@@ -175,7 +175,7 @@ void rpn_type()
     if (type < 0 || type >= (int)cmd_max)
         type = (int)cmd_undef;
 
-    unsigned int string_size = strlen(object::s_cmd_type_string[type]);
+    unsigned int string_size = (unsigned int)strlen(object::s_cmd_type_string[type]);
     unsigned int size = sizeof(symbol)+string_size+1;
     ostring* typ = (ostring*)_stack->allocate_back(size, cmd_string);
     typ->set(object::s_cmd_type_string[type], string_size);
@@ -196,13 +196,13 @@ void rpn_precision()
     if (prec>=(unsigned long)MPFR_PREC_MIN && prec<=(unsigned long)MPFR_PREC_MAX)
     {
         floating_t::s_mpfr_prec = (mpfr_prec_t)prec;
-        floating_t::s_mpfr_prec_bytes = mpfr_custom_get_size(prec);
+        floating_t::s_mpfr_prec_bytes = (unsigned int)mpfr_custom_get_size(prec);
         
         // modify digits seen by user if std mode
         if (number::s_mode == number::std)
         {
             // calc max nb of digits user can see with the current bit precision
-            number::s_decimal_digits = base_digits_from_bit_precision(10, floating_t::s_mpfr_prec);
+            number::s_decimal_digits = base_digits_from_bit_precision(10, (int)floating_t::s_mpfr_prec);
             number::s_mpfr_printf_format = make_digit_format(number::s_decimal_digits, MPFR_FORMAT_STD);
         }
     }

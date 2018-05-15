@@ -1,0 +1,19 @@
+--- ../../../linenoise-ng/src/linenoise.cpp	2017-06-10 18:13:31.752976287 +0200
++++ linenoise.cpp	2017-06-12 18:54:50.481794824 +0200
+@@ -2587,12 +2587,15 @@
+ 
+     // ctrl-I/tab, command completion, needs to be before switch statement
+     if (c == ctrlChar('I') && completionCallback) {
++      // rpn #178: enable autocompletion on void entry
++      #if 0
+       if (pos == 0)  // SERVER-4967 -- in earlier versions, you could paste
+                      // previous output
+         continue;    //  back into the shell ... this output may have leading
+                      //  tabs.
+       // This hack (i.e. what the old code did) prevents command completion
+       //  on an empty line but lets users paste text with leading tabs.
++      #endif
+ 
+       killRing.lastAction = KillRing::actionOther;
+       historyRecallMostRecent = false;
+	   

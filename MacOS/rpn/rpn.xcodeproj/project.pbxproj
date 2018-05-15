@@ -7,10 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4272691220AAD655001156DB /* wcwidth.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4272690F20AAD655001156DB /* wcwidth.cpp */; };
+		4272691320AAD655001156DB /* linenoise.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4272691020AAD655001156DB /* linenoise.cpp */; };
+		4272691420AAD655001156DB /* ConvertUTF.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4272691120AAD655001156DB /* ConvertUTF.cpp */; };
 		427B8D2020AAC51100A9ACDA /* object.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 427B8D1020AAC51000A9ACDA /* object.cpp */; };
 		427B8D2120AAC51100A9ACDA /* program.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 427B8D1320AAC51000A9ACDA /* program.cpp */; };
 		427B8D2220AAC51100A9ACDA /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 427B8D1E20AAC51100A9ACDA /* main.cpp */; };
-		427B8D2820AAC56100A9ACDA /* liblinenoise.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 427B8D2720AAC56100A9ACDA /* liblinenoise.a */; };
 		427B8D2A20AAC59200A9ACDA /* libmpfr.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 427B8D2920AAC59200A9ACDA /* libmpfr.a */; };
 /* End PBXBuildFile section */
 
@@ -27,6 +29,10 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		4272690E20AAD655001156DB /* ConvertUTF.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ConvertUTF.h; path = "../../linenoise-ng/src/ConvertUTF.h"; sourceTree = "<group>"; };
+		4272690F20AAD655001156DB /* wcwidth.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = wcwidth.cpp; path = "../../linenoise-ng/src/wcwidth.cpp"; sourceTree = "<group>"; };
+		4272691020AAD655001156DB /* linenoise.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = linenoise.cpp; path = "../../linenoise-ng/src/linenoise.cpp"; sourceTree = "<group>"; };
+		4272691120AAD655001156DB /* ConvertUTF.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ConvertUTF.cpp; path = "../../linenoise-ng/src/ConvertUTF.cpp"; sourceTree = "<group>"; };
 		427B8CFF20AAC4FF00A9ACDA /* rpn */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = rpn; sourceTree = BUILT_PRODUCTS_DIR; };
 		427B8D0920AAC50F00A9ACDA /* constant.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = constant.h; path = ../../../src/constant.h; sourceTree = "<group>"; };
 		427B8D0A20AAC50F00A9ACDA /* rpn-stack.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = "rpn-stack.hpp"; path = "../../../src/rpn-stack.hpp"; sourceTree = "<group>"; };
@@ -51,7 +57,6 @@
 		427B8D1D20AAC51100A9ACDA /* rpn-string.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = "rpn-string.hpp"; path = "../../../src/rpn-string.hpp"; sourceTree = "<group>"; };
 		427B8D1E20AAC51100A9ACDA /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = main.cpp; path = ../../../src/main.cpp; sourceTree = "<group>"; };
 		427B8D1F20AAC51100A9ACDA /* debug.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = debug.h; path = ../../../src/debug.h; sourceTree = "<group>"; };
-		427B8D2720AAC56100A9ACDA /* liblinenoise.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = liblinenoise.a; path = ../../../../../../opt/local/lib/liblinenoise.a; sourceTree = "<group>"; };
 		427B8D2920AAC59200A9ACDA /* libmpfr.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libmpfr.a; path = ../../../../../../opt/local/lib/libmpfr.a; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -61,19 +66,29 @@
 			buildActionMask = 2147483647;
 			files = (
 				427B8D2A20AAC59200A9ACDA /* libmpfr.a in Frameworks */,
-				427B8D2820AAC56100A9ACDA /* liblinenoise.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		4272690D20AAD63A001156DB /* linenoise */ = {
+			isa = PBXGroup;
+			children = (
+				4272691120AAD655001156DB /* ConvertUTF.cpp */,
+				4272690E20AAD655001156DB /* ConvertUTF.h */,
+				4272691020AAD655001156DB /* linenoise.cpp */,
+				4272690F20AAD655001156DB /* wcwidth.cpp */,
+			);
+			name = linenoise;
+			sourceTree = "<group>";
+		};
 		427B8CF620AAC4FF00A9ACDA = {
 			isa = PBXGroup;
 			children = (
+				4272690D20AAD63A001156DB /* linenoise */,
 				427B8D0120AAC4FF00A9ACDA /* rpn */,
 				427B8D0020AAC4FF00A9ACDA /* Products */,
-				427B8D2720AAC56100A9ACDA /* liblinenoise.a */,
 				427B8D2920AAC59200A9ACDA /* libmpfr.a */,
 			);
 			sourceTree = "<group>";
@@ -174,7 +189,10 @@
 			files = (
 				427B8D2120AAC51100A9ACDA /* program.cpp in Sources */,
 				427B8D2020AAC51100A9ACDA /* object.cpp in Sources */,
+				4272691320AAD655001156DB /* linenoise.cpp in Sources */,
+				4272691220AAD655001156DB /* wcwidth.cpp in Sources */,
 				427B8D2220AAC51100A9ACDA /* main.cpp in Sources */,
+				4272691420AAD655001156DB /* ConvertUTF.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

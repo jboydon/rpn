@@ -24,3 +24,12 @@
 
 # editors garbage
 *~
+
+
+## Xcode
+## User settings
+xcuserdata/
+
+
+
+
